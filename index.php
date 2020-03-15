@@ -4,7 +4,8 @@ error_reporting(0);
 
 //Including required files
 require 'src/Box.php';
-require 'src/FarsiGD.php';
+//require 'src/FarsiGD.php';
+require 'src/RtlGD.php';
 require 'src/color.php';
 
 use GDText\Box;
@@ -59,13 +60,19 @@ $box->setTextAlign('right', 'top');
  *  سلام will become مالس (with correct character format)
  *  Hello will remain Hello
  */
-$gd = new FarsiGD();
+$gd = new RtlGD();
 
 // The text For conversion
-$text = 'آموزشی مختلف';
+$text = 'آموزشی مختلف
+טקסט בעברית בלבד, ארוך כדי שתישבר השורה, אולי.
+טקסט שמכיל שעה 10:00 הוא בעייתי, צריך לבדוק את זה
+טקסט בעברית אבל שיש לו גם מילים ב English באמצע וזה בלגאן';
+
+
 
 // Converting the text
-$text = $gd->persianText($text, 'fa', 'normal');
+
+$text = $gd->persianText($text, 'fa', 'normal', false);
 
 // Draws the text on the picture
 $box->draw($text);
