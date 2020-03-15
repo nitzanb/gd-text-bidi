@@ -178,29 +178,44 @@ class Box
         if (!isset($this->fontFace)) {
             throw new \InvalidArgumentException('No path to font file has been specified.');
         }
-
+          
         $lines = array();
         // Split text explicitly into lines by \n, \r\n and \r
         $explicitLines = preg_split('/\n|\r\n?/', $text);
+
+        $explicitLines = array_reverse($explicitLines);
+           // print_r($explicitLines); die();
+
         foreach ($explicitLines as $line) {
+           
             // Check every line if it needs to be wrapped
+            // Changed the algorithem, as it caused only the first and the last word to appear
             $words = explode(" ", $line);
-            //$line = $words[0];
-            $line = $words[count($words)-1];
-            //for ($i = 1; $i < count($words); $i++) {
+            $line = "";
             for ($i = count($words)-1 ; $i != -1; $i--) {
-                 $line = $words[count($words)-1];
+           
+               
+                 
                 //$box = $this->calculateBox($line." ".$words[$i]);
                 $box = $this->calculateBox($words[$i]." ".$line);
+              
+           
                 if (($box[4]-$box[6]) >= $this->box['width']) {
                     $lines[] = $line;
                     $line = $words[$i];
+                    
                 } else {
-                    //$line .= " ".$words[$i];
-                    $line =  $words[$i] ." ". $line;
+                                   
+                    $line = trim( $words[$i] ." ". $line);
+                  
+     
                 }
             }
+           
             $lines[] = $line;
+     
+           
+          
         }
 
         if ($this->debug) {
